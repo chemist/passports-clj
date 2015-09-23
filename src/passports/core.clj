@@ -80,7 +80,6 @@
       (doseq [line (line-seq as-reader)]
        (let [passport (extract-passport line)]
          (when (not (nil? passport))
-           (println passport)
            (.write ((keyword (str (:base passport))) files) (pack-int (:int passport))))))))
   (read->sort->write base-path))
 
@@ -104,17 +103,10 @@
                max-int-pos (/ (.size mapped-file) 4)]
           (let [half-int-pos (bit-shift-right (+ max-int-pos min-int-pos)  1)
                 int-for-check (unpack-int (mmap/get-bytes mapped-file (* half-int-pos 4) 4))]
-            (println (str "min  " min-int-pos))
-            (println (str "max  " max-int-pos))
-            (println (str "half " half-int-pos))
            (cond (= passport-int int-for-check) "passport found, its bad"
                  (< (- max-int-pos min-int-pos) 2) "passport was not found its good"
-                 (< passport-int int-for-check) (do
-                                                  (println (str passport-int " < " int-for-check))
-                                                  (recur min-int-pos half-int-pos))
-                 (> passport-int int-for-check) (do
-                                                  (println (str passport-int " > " int-for-check))
-                                                  (recur half-int-pos max-int-pos))))))))
+                 (< passport-int int-for-check) (recur min-int-pos half-int-pos)
+                 (> passport-int int-for-check) (recur half-int-pos max-int-pos)))))))
                  
 (defn -main
   "I don't do a whole lot ... yet."
