@@ -47,7 +47,7 @@
   (for [x (range 10)]
    (let [file (str base-path x)
          sorted (read->sort file)]
-     (with-open [out (io/output-stream (str file "-sorted"))]
+     (with-open [out (io/output-stream (str file))]
        (doseq [x sorted]
          (.write out (pack-int x)))
        nil))))
@@ -80,14 +80,26 @@
       (doseq [line (line-seq as-reader)]
        (let [passport (extract-passport line)]
          (when (not (nil? passport))
-           (.write ((keyword (str (:base passport))) files) (:int passport)))))))
+           (println passport)
+           (.write ((keyword (str (:base passport))) files) (pack-int (:int passport))))))))
   (read->sort->write base-path))
+
+(defn show-base [n]
+  (let [buf (byte-array 4)]
+   (with-open [in (io/input-stream (str base-path n))]
+     (loop []
+       (let [number (.read in buf)]
+         (if (< number 0)
+           (println "end")
+           (do
+             (println (str n (unpack-int buf)))
+             (recur))))))))
 
 (defn check-passport [passport]
   (let [pass (re-find #"(\d)(\d+)" passport)
         [_ file-number passport-str] pass
         passport-int (Integer. passport-str)]
-    (with-open [mapped-file (mmap/get-mmap (str base-path file-number "-sorted"))]
+    (with-open [mapped-file (mmap/get-mmap (str base-path file-number))]
         (loop [min-int-pos 0
                max-int-pos (/ (.size mapped-file) 4)]
           (let [half-int-pos (bit-shift-right (+ max-int-pos min-int-pos)  1)
@@ -95,11 +107,14 @@
             (println (str "min  " min-int-pos))
             (println (str "max  " max-int-pos))
             (println (str "half " half-int-pos))
-            (println int-for-check)
            (cond (= passport-int int-for-check) "passport found, its bad"
                  (< (- max-int-pos min-int-pos) 2) "passport was not found its good"
-                 (< passport-int int-for-check) (recur min-int-pos half-int-pos)
-                 (> passport-int int-for-check) (recur half-int-pos max-int-pos)))))))
+                 (< passport-int int-for-check) (do
+                                                  (println (str passport-int " < " int-for-check))
+                                                  (recur min-int-pos half-int-pos))
+                 (> passport-int int-for-check) (do
+                                                  (println (str passport-int " > " int-for-check))
+                                                  (recur half-int-pos max-int-pos))))))))
                  
 (defn -main
   "I don't do a whole lot ... yet."
