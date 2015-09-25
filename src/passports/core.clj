@@ -1,6 +1,7 @@
 (ns passports.core
   (:require [clojure.java.io :as io]
             [clj-mmap :as mmap]
+            [clj-http.client :as client]
             [bytebuffer.buff :refer :all])
   (:import (org.apache.commons.compress.compressors.bzip2 BZip2CompressorInputStream)
            (java.nio ByteBuffer))
@@ -112,3 +113,4 @@
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!"))
+

@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.apache.commons/commons-compress "1.4"]
                  [bytebuffer "0.2.0"]
+                 [clj-http "2.0.0"]
                  [clj-mmap "1.1.2"]]
   :main ^:skip-aot passports.core
   :target-path "target/%s"
