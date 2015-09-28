@@ -18,6 +18,7 @@
                  [cc.qbits/jet "0.6.6"]
                  [org.omcljs/om "0.9.0"]
                  [prismatic/om-tools "0.4.0"]
+                 [cljs-http "0.1.37"]
                  ]
   :main ^:skip-aot passports.core
   :target-path "target/%s"
