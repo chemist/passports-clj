@@ -112,6 +112,10 @@
                    (< (- max-int-pos min-int-pos) 2) false ;"passport was not found its good"
                    (< passport-int int-for-check) (recur min-int-pos half-int-pos)
                    (> passport-int int-for-check) (recur half-int-pos max-int-pos))))))))
+
+(defn check-bulk [many]
+  (let [lines (clojure.string/split-lines many)]
+    (map (fn [x] {:passport x :check-result (check-passport x)}) lines)))
                  
 (defn -main
   "I don't do a whole lot ... yet."

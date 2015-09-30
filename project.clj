@@ -15,6 +15,7 @@
                  [ring/ring-core "1.4.0" :exclusions [javax.servlet/servlet-api]]
                  [ring/ring-servlet "1.4.0" :exclusions [javax.servlet/servlet-api]]
                  [ring/ring-defaults "0.1.5" :exclusions [javax.servlet/servlet-api]]
+                 [ring/ring-json "0.4.0"]
                  [cc.qbits/jet "0.6.6"]
                  [org.omcljs/om "0.9.0"]
                  [prismatic/om-tools "0.4.0"]
