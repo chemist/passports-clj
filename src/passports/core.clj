@@ -18,30 +18,21 @@
   [req]
   (render (io/resource "index.html") req))
 
-(defn bulk
-  [req]
+(defn bulk [req]
   (let [result (base/check-bulk (:bulk-body (:params req)))]
-    (assoc (response result) :headers {"Content-Type" "application/json"})))
+   (assoc (response result) :headers {"Content-Type" "application/json"})))
+
 
 ;; Defines a handler that acts as router
 (defroutes app
   (GET "/" [] home)
   (POST "/bulk" [] bulk)
-  (GET "/check/:passport" [passport]
-       (let [check-result (base/check-passport passport)]
-         (cond 
-           (nil? check-result) {:status 400 :headers {"Content-Type" "text/html; charset=utf-8"} :body "can't parse passport number"}
-           check-result {:status 401 :headers {"Content-Type" "text/html; charset=utf-8"} :body "bad passport"}
-           :else        {:status 200 :headers {"Content-Type" "text/html; charset=utf-8"} :body "good passport"})))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
-(defn -main []
-  )
 ;; Application entry point
-(defn main
+(defn -main
   [& args]
-  (println (base/check-passport "000000"))
   (let [app (wrap-json-response (wrap-defaults app (assoc site-defaults :session false :security {:anti-forgery false})))
         server (run-jetty {:ring-handler app :port 3000 :join? false})]
     server

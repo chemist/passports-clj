@@ -19,6 +19,7 @@
                  [cc.qbits/jet "0.6.6"]
                  [org.omcljs/om "0.9.0"]
                  [prismatic/om-tools "0.4.0"]
+                 [prismatic/schema "1.0.1"]
                  [cljs-http "0.1.37"]
                  ]
   :main ^:skip-aot passports.core

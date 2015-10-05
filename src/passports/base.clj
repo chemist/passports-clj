@@ -117,8 +117,3 @@
   (let [lines (clojure.string/split-lines many)]
     (map (fn [x] {:passport x :check-result (check-passport x)}) lines)))
                  
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
-
